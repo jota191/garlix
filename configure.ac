@@ -12,7 +12,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 #languages used
 AC_PROG_CC
-AC_PROG_AS
+AM_PROG_AS
 
 # lists of files that configure script should generate
 AC_OUTPUT([
