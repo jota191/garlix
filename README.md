@@ -12,6 +12,5 @@ A kernel from scratch
 Each time a step of the tutorial is finished a tag is created
 
 
-### 0.1
+### 0.1 - compiling empty kernel
 Corresponds to chapter 3.
-Here an empty kernel is compiled.

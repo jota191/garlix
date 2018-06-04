@@ -2,7 +2,12 @@ bin_PROGRAMS = garlix
 
 garlix_SOURCES = main.c \
 boot.S \
-link.ld
+link.ld \
+util.S \
+stdio.c \
+string.c \
+system.c \
+vga.c
 
 garlix_LDFLAGS = \
 -T link.ld 
@@ -14,7 +19,8 @@ garlix_CFLAGS = \
 -nodefaultlibs \
 -nostartfiles \
 -fno-builtin \
--fno-stack-protector
+-fno-stack-protector \
+-I ../include
 
 garlix_CCASFLAGS = -m32
 

@@ -2,7 +2,7 @@
 # This is the autoconf configuration file for the garlix kernel
 
 
-AC_INIT(garlix,0.0.1,jota.191@gmail.com)
+AC_INIT(garlix,0.0.2,jota.191@gmail.com)
 
 
 # options for running automake
@@ -17,5 +17,6 @@ AM_PROG_AS
 # lists of files that configure script should generate
 AC_OUTPUT([
 Makefile
+include/Makefile
 src/Makefile
 ])
