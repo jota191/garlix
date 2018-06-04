@@ -98,8 +98,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-garlix_SOURCES = garlix.c
-garlix_OBJECTS = garlix-garlix.$(OBJEXT)
+am_garlix_OBJECTS = garlix-main.$(OBJEXT) garlix-boot.$(OBJEXT)
+garlix_OBJECTS = $(am_garlix_OBJECTS)
 garlix_LDADD = $(LDADD)
 garlix_LINK = $(CCLD) $(garlix_CFLAGS) $(CFLAGS) $(garlix_LDFLAGS) \
 	$(LDFLAGS) -o $@
@@ -123,6 +123,12 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
+AM_V_CPPAS = $(am__v_CPPAS_@AM_V@)
+am__v_CPPAS_ = $(am__v_CPPAS_@AM_DEFAULT_V@)
+am__v_CPPAS_0 = @echo "  CPPAS   " $@;
+am__v_CPPAS_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -135,8 +141,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = garlix.c
-DIST_SOURCES = garlix.c
+SOURCES = $(garlix_SOURCES)
+DIST_SOURCES = $(garlix_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -251,13 +257,12 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-garlix_SOUCES = main.c \
+garlix_SOURCES = main.c \
 boot.S \
 link.ld
 
 garlix_LDFLAGS = \
--T link.ld \
--Wl, --build-id=none
+-T link.ld 
 
 garlix_CFLAGS = \
 -m32 \
@@ -265,13 +270,13 @@ garlix_CFLAGS = \
 -nodefaultlibs \
 -nostartfiles \
 -fno-builtin \
-fno-stack-protector
+-fno-stack-protector
 
 garlix_CCASFLAGS = -m32
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .o .obj
+.SUFFIXES: .S .c .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -354,7 +359,36 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/garlix-garlix.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/garlix-boot.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/garlix-main.Po@am__quote@
+
+.S.o:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CPPASCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ $<
+
+.S.obj:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CPPASCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+garlix-boot.o: boot.S
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CCASFLAGS) $(CCASFLAGS) -MT garlix-boot.o -MD -MP -MF $(DEPDIR)/garlix-boot.Tpo -c -o garlix-boot.o `test -f 'boot.S' || echo '$(srcdir)/'`boot.S
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-boot.Tpo $(DEPDIR)/garlix-boot.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='boot.S' object='garlix-boot.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CCASFLAGS) $(CCASFLAGS) -c -o garlix-boot.o `test -f 'boot.S' || echo '$(srcdir)/'`boot.S
+
+garlix-boot.obj: boot.S
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CCASFLAGS) $(CCASFLAGS) -MT garlix-boot.obj -MD -MP -MF $(DEPDIR)/garlix-boot.Tpo -c -o garlix-boot.obj `if test -f 'boot.S'; then $(CYGPATH_W) 'boot.S'; else $(CYGPATH_W) '$(srcdir)/boot.S'; fi`
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-boot.Tpo $(DEPDIR)/garlix-boot.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='boot.S' object='garlix-boot.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CCASFLAGS) $(CCASFLAGS) -c -o garlix-boot.obj `if test -f 'boot.S'; then $(CYGPATH_W) 'boot.S'; else $(CYGPATH_W) '$(srcdir)/boot.S'; fi`
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -370,19 +404,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-garlix-garlix.o: garlix.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -MT garlix-garlix.o -MD -MP -MF $(DEPDIR)/garlix-garlix.Tpo -c -o garlix-garlix.o `test -f 'garlix.c' || echo '$(srcdir)/'`garlix.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-garlix.Tpo $(DEPDIR)/garlix-garlix.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='garlix.c' object='garlix-garlix.o' libtool=no @AMDEPBACKSLASH@
+garlix-main.o: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -MT garlix-main.o -MD -MP -MF $(DEPDIR)/garlix-main.Tpo -c -o garlix-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-main.Tpo $(DEPDIR)/garlix-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='garlix-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -c -o garlix-garlix.o `test -f 'garlix.c' || echo '$(srcdir)/'`garlix.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -c -o garlix-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
 
-garlix-garlix.obj: garlix.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -MT garlix-garlix.obj -MD -MP -MF $(DEPDIR)/garlix-garlix.Tpo -c -o garlix-garlix.obj `if test -f 'garlix.c'; then $(CYGPATH_W) 'garlix.c'; else $(CYGPATH_W) '$(srcdir)/garlix.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-garlix.Tpo $(DEPDIR)/garlix-garlix.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='garlix.c' object='garlix-garlix.obj' libtool=no @AMDEPBACKSLASH@
+garlix-main.obj: main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -MT garlix-main.obj -MD -MP -MF $(DEPDIR)/garlix-main.Tpo -c -o garlix-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/garlix-main.Tpo $(DEPDIR)/garlix-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='garlix-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -c -o garlix-garlix.obj `if test -f 'garlix.c'; then $(CYGPATH_W) 'garlix.c'; else $(CYGPATH_W) '$(srcdir)/garlix.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(garlix_CFLAGS) $(CFLAGS) -c -o garlix-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
